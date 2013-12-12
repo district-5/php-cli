@@ -1,5 +1,7 @@
 ![Travis](https://travis-ci.org/rogerthomas84/ohconsole.png)
 
+[View on Packagist](https://packagist.org/packages/rogerthomas84/ohconsole)
+
 OhConsole
 =========
 
