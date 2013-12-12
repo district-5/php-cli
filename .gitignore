@@ -1,5 +1,6 @@
-.project
-.settings
-.buildpath
 *~
 index.php
+.buildpath
+.project
+.settings
+build

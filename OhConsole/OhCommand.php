@@ -6,7 +6,7 @@
  * @copyright   2013 Roger Thomas
  * @link        http://www.rogerethomas.com
  * @license     http://www.rogerethomas.com/license
- * @version     1.0
+ * @since       1.0.0
  * @package     OhConsole
  *
  * MIT LICENSE
@@ -83,7 +83,7 @@ abstract class OhCommand
      */
     final public function getArgument($key)
     {
-        if (array_key_exists($key, $this->argv)) {
+        if (array_key_exists($key, $this->getArguments())) {
             return $this->argv[$key];
         }
 
@@ -115,7 +115,7 @@ abstract class OhCommand
      */
     final public function getInjectable($key)
     {
-        if (array_key_exists($key, $this->injectables)) {
+        if (array_key_exists($key, $this->getInjectables())) {
             return $this->injectables[$key];
         }
 

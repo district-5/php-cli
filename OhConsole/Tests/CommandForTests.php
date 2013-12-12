@@ -30,8 +30,29 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace OhConsole\Exception;
+namespace OhConsole\Tests;
 
-class ArgumentNotSetException extends \Exception
+use OhConsole\OhCommand;
+
+class CommandForTests extends OhCommand
 {
+    /**
+     * @var string
+     */
+    protected $command = 'ohconsole-command-for-tests';
+
+    public function run()
+    {
+        $args = $this->getArguments();
+        $inj = $this->getInjectables();
+        $invalidInjectable = $this->getInjectable('age');
+        $invalidArgument = $this->getArgument(2);
+        $this->outputInfo('Arguments: ' . count($args));
+        $this->outputInfo('Argument 1: ' . $this->getArgument(1));
+        $this->outputInfo('Argument invalid: ' . strlen($invalidArgument));
+        $this->outputInfo('Injectables: ' . count($inj));
+        $this->outputInfo('Injectable name: ' . $this->getInjectable('name'));
+        $this->outputInfo('Injectable invalid: ' . strlen($invalidInjectable));
+        $this->outputInfo($this->getCommand());
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /**
  * OhConsole - a simple console command line tool
  *
@@ -30,8 +31,16 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace OhConsole\Exception;
+$dir = realpath(__DIR__ . '/../../');
 
-class ArgumentNotSetException extends \Exception
-{
-}
+spl_autoload_register(
+    function($class)
+    {
+        $dir = realpath(__DIR__ . '/../../');
+        $target = explode('\\', $class);
+        $path = $dir . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $target) . '.php';
+        if (file_exists($path)) {
+            require_once $path;
+        }
+    }
+);

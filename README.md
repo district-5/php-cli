@@ -1,3 +1,5 @@
+![Travis](https://travis-ci.org/rogerthomas84/ohconsole.png)
+
 OhConsole
 =========
 
