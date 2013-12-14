@@ -100,7 +100,7 @@ class OhConsole
             $tpl = "\033[0;31m%s\033[0m";
             echo PHP_EOL . sprintf($tpl, 'Valid command not found.') . PHP_EOL;
             if (!empty($commands)) {
-                echo '    Valid commands are:';
+                echo '    Valid commands are:' . PHP_EOL;
             }
             foreach ($commands as $single) {
                 echo '        ' . $single . PHP_EOL;
