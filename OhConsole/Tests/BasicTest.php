@@ -101,10 +101,13 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $argv = array(0 => '', 1 => 'ohconsole-example-none');
         // Start OhConsole
         $command = new \OhConsole\OhConsole($argv, $classes, $injectables);
-
+        @ob_start();
         try {
             $command->run();
         } catch (\Exception $e) {
+            $result = @ob_get_clean();
+            $this->assertContains('Valid command not found', $result);
+            $this->assertContains('Valid commands are:', $result);
             $this->assertInstanceOf('\OhConsole\Exception\InvalidConsoleArgumentException', $e);
             return;
         }

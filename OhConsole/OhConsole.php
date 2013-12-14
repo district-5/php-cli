@@ -80,11 +80,13 @@ class OhConsole
             throw new ArgumentNotSetException('Argument not passed.');
         }
 
+        $commands = array();
         $found = false;
         foreach ($this->classes as $class) {
             $instance = new $class();
             if ($instance instanceof OhCommand) {
                 $command = $instance->getCommand();
+                $commands[] = $command;
                 if ($command == $this->argv[1]) {
                     $found = true;
                     $instance->setArguments($this->argv);
@@ -95,6 +97,15 @@ class OhConsole
         }
 
         if (!$found) {
+            $tpl = "\033[0;31m%s\033[0m";
+            echo PHP_EOL . sprintf($tpl, 'Valid command not found.') . PHP_EOL;
+            if (!empty($commands)) {
+                echo '    Valid commands are:';
+            }
+            foreach ($commands as $single) {
+                echo '        ' . $single . PHP_EOL;
+            }
+            echo PHP_EOL . sprintf($tpl, '...exiting') . PHP_EOL;
             throw new InvalidConsoleArgumentException();
         }
     }
