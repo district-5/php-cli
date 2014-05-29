@@ -1,4 +1,4 @@
-![Travis](https://travis-ci.org/rogerthomas84/ohconsole.png)
+[![Build Status](https://travis-ci.org/rogerthomas84/ohconsole.png)](http://travis-ci.org/rogerthomas84/ohconsole)
 
 [View on Packagist](https://packagist.org/packages/rogerthomas84/ohconsole)
 
