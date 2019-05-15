@@ -41,6 +41,16 @@ class ExampleOne extends OhCommand
      */
     protected $command = 'ohconsole-example-one';
 
+    /**
+     * @var bool
+     */
+    protected $isDefault = true;
+
+    /**
+     * @var bool
+     */
+    protected $isHelp = true;
+
     public function run()
     {
         $this->outputInfo('Running Example One');

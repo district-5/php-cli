@@ -55,6 +55,7 @@ class OhConsole
 
     /**
      * Construct giving the argv variable
+     *
      * @param array $argv
      * @param array $classes
      * @param array $injectables (optional) default empty array
@@ -68,20 +69,29 @@ class OhConsole
 
     /**
      * Run the console command.
+     *
+     * @param bool $allowHelpAndDefault (optional) default false
      * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     * @throws NoCommandClassesGivenException
      */
-    public function run()
+    public function run($allowHelpAndDefault=false)
     {
         if (empty($this->classes)) {
             throw new NoCommandClassesGivenException('Array of classes has not been passed.');
         }
 
         if (!array_key_exists(1, $this->argv)) {
-            throw new ArgumentNotSetException('Argument not passed.');
+            if ($allowHelpAndDefault === false) {
+                throw new ArgumentNotSetException('Argument not passed.');
+            }
+            $this->argv[1] = '';
         }
 
         $commands = array();
         $found = false;
+        $defaultInstance = null;
+        $helpInstance = null;
         foreach ($this->classes as $class) {
             $instance = new $class();
             if ($instance instanceof OhCommand) {
@@ -92,11 +102,31 @@ class OhConsole
                     $instance->setArguments($this->argv);
                     $instance->setInjectables($this->injectables);
                     $instance->run();
+                } else {
+                    if ($instance->isHelpCommand() === true) {
+                        $helpInstance = $instance;
+                    }
+                    if ($instance->isDefaultCommand() === true) {
+                        $defaultInstance = $instance;
+                    }
                 }
             }
         }
 
         if (!$found) {
+            if ($helpInstance !== null && $this->argv[1] === '--help') {
+                $helpInstance->setArguments($this->argv);
+                $helpInstance->setInjectables($this->injectables);
+                $helpInstance->run();
+                return;
+            }
+
+            if ($defaultInstance !== null) {
+                $defaultInstance->setArguments($this->argv);
+                $defaultInstance->setInjectables($this->injectables);
+                $defaultInstance->run();
+                return;
+            }
             $tpl = "\033[0;31m%s\033[0m";
             echo PHP_EOL . sprintf($tpl, 'Valid command not found.') . PHP_EOL;
             if (!empty($commands)) {

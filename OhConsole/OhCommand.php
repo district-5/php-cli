@@ -45,13 +45,44 @@ abstract class OhCommand
     protected $injectables = array();
 
     /**
-     * @var array
+     * @var string
      */
     protected $command = null;
 
     /**
+     * @var bool
+     */
+    protected $isDefault = false;
+
+    /**
+     * @var bool
+     */
+    protected $isHelp = false;
+
+    /**
+     * Is this a default 'help' command?
+     *
+     * @return bool
+     */
+    final public function isHelpCommand()
+    {
+        return $this->isHelp;
+    }
+
+    /**
+     * Is this a default 'fall back' command?
+     *
+     * @return bool
+     */
+    final public function isDefaultCommand()
+    {
+        return $this->isDefault;
+    }
+
+    /**
      * Get the command for this class.
-     * @return string|null
+     *
+     * @return string
      */
     final public function getCommand()
     {
