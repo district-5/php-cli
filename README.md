@@ -6,6 +6,13 @@ OhConsole
 OhConsole is a simple interface to create advanced PHP CLI applications by abstracting the commands into separated
 classes.
 
+Theory
+-----------
+
+Arguments are converted to namespaces. The final route class must be named `<your name>Route`;
+
+For example, the command `config get url` would look for a class of `Config\Get\UrlRoute`
+
 Quick Start
 -----------
 
@@ -14,21 +21,7 @@ This file should contain something like this:
 
 ```php
 <?php
-include "autoloader.php"; // Your autoloader.
-                          // If you don't have one then you can use the below
-/**
-   include 'OhConsole/OhConsole.php';
-   include 'OhConsole/OhCommand.php';
-   include 'OhConsole/Exception/ArgumentNotSetException.php';
-   include 'OhConsole/Exception/InvalidConsoleArgumentException.php';
-   include 'OhConsole/Exception/NoCommandClassesGivenException.php';
-*/
-
-// Map your commands
-$classes = array(
-    '\OhConsole\Examples\ExampleOne',
-    '\OhConsole\Examples\ExampleTwo'
-);
+include 'autoloader.php'; // Your autoloader.
 
 // Map any injectables that you want to pass
 $injectables = array(
@@ -38,7 +31,7 @@ $injectables = array(
 );
 
 // Start OhConsole
-$command = new \OhConsole\OhConsole($argv, $classes, $injectables);
+$command = new \OhConsole\OhConsole($argv, $injectables);
 
 // Run OhConsole
 $command->run();
@@ -50,15 +43,15 @@ $command->run();
 Examples
 --------
 
-* [Example Command One](/OhConsole/Examples/ExampleOne.php)
-* [Example Command Two](/OhConsole/Examples/ExampleTwo.php)
+* [Example Command One](/OhConsole/Examples/ExampleOneRoute.php)
+* [Example Command Two](/OhConsole/Examples/ExampleTwoRoute.php)
 
 Once you've got your example set up, call your main script (see below) and pass one of the commands defined in the PHP
 files.
 
 ```sh
-php bin/console ohconsole-example-one
-php bin/console ohconsole-example-two
+php bin/console ohconsole examples one
+php bin/console ohconsole examples two
 ```
 
 Here's a sample `script` that you can use to get started. Feel free to replace the `include`'s with your 
@@ -66,19 +59,9 @@ autoloader instead.
 
 ```php
 <?php
-include 'OhConsole/OhConsole.php';
-include 'OhConsole/OhCommand.php';
-include 'OhConsole/Exception/ArgumentNotSetException.php';
-include 'OhConsole/Exception/InvalidConsoleArgumentException.php';
-include 'OhConsole/Exception/NoCommandClassesGivenException.php';
-
-include 'OhConsole/Examples/ExampleOne.php';
-include 'OhConsole/Examples/ExampleTwo.php';
-
-$classes = array(
-    '\OhConsole\Examples\ExampleOne',
-    '\OhConsole\Examples\ExampleTwo'
-);
+include 'autoloader.php';
+include 'OhConsole/Examples/ExampleOneRoute.php';
+include 'OhConsole/Examples/ExampleTwoRoute.php';
 
 $injectables = array(
     'config' => array(
@@ -88,6 +71,6 @@ $injectables = array(
     )
 );
 
-$command = new \OhConsole\OhConsole($argv, $classes, $injectables);
+$command = new \OhConsole\OhConsole($argv, $injectables);
 $command->run();
 ```

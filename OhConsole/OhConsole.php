@@ -34,7 +34,7 @@ namespace OhConsole;
 
 use OhConsole\Exception\ArgumentNotSetException;
 use OhConsole\Exception\InvalidConsoleArgumentException;
-use OhConsole\Exception\NoCommandClassesGivenException;
+
 
 class OhConsole
 {
@@ -46,97 +46,85 @@ class OhConsole
     /**
      * @var array
      */
-    private $classes = array();
-
-    /**
-     * @var array
-     */
     private $injectables = array();
 
     /**
      * Construct giving the argv variable
      *
      * @param array $argv
-     * @param array $classes
      * @param array $injectables (optional) default empty array
      */
-    public function __construct(array $argv, array $classes, array $injectables = array())
+    public function __construct(array $argv, array $injectables = array())
     {
         $this->argv = $argv;
-        $this->classes = $classes;
         $this->injectables = $injectables;
     }
 
     /**
      * Run the console command.
      *
-     * @param bool $allowHelpAndDefault (optional) default false
      * @throws ArgumentNotSetException
      * @throws InvalidConsoleArgumentException
-     * @throws NoCommandClassesGivenException
      */
-    public function run($allowHelpAndDefault=false)
+    public function run()
     {
-        if (empty($this->classes)) {
-            throw new NoCommandClassesGivenException('Array of classes has not been passed.');
-        }
-
         if (!array_key_exists(1, $this->argv)) {
-            if ($allowHelpAndDefault === false) {
-                throw new ArgumentNotSetException('Argument not passed.');
-            }
-            $this->argv[1] = '';
+            throw new ArgumentNotSetException('Argument not passed.');
         }
 
-        $commands = array();
+        $newArray = array_merge([], $this->argv);
+        unset($newArray[0]);
+        $proposedClassNames = [];
+        $rolling = '\\';
+        $tryLength = 0;
+        foreach ($newArray as $_ => $segment) {
+            $tryLength++;
+            $rolling .= $this->treatSegment($segment);
+            if ($tryLength > 1) {
+                if (class_exists($rolling . 'Route')) {
+                    $proposedClassNames[] = $rolling . 'Route';
+                }
+            }
+            $rolling .= '\\';
+        }
+
+        $triedClasses = [];
         $found = false;
-        $defaultInstance = null;
-        $helpInstance = null;
-        foreach ($this->classes as $class) {
+        foreach (array_reverse($proposedClassNames) as $class) {
+            if (!class_exists($class)) {
+                $triedClasses[] = $class;
+                continue;
+            }
+
             $instance = new $class();
             if ($instance instanceof OhCommand) {
-                $command = $instance->getCommand();
-                $commands[] = $command;
-                if ($command == $this->argv[1]) {
-                    $found = true;
-                    $instance->setArguments($this->argv);
-                    $instance->setInjectables($this->injectables);
-                    $instance->run();
-                } else {
-                    if ($instance->isHelpCommand() === true) {
-                        $helpInstance = $instance;
-                    }
-                    if ($instance->isDefaultCommand() === true) {
-                        $defaultInstance = $instance;
-                    }
-                }
+                $found = true;
+                $instance->setArguments($this->argv);
+                $instance->setInjectables($this->injectables);
+                $instance->run();
+                break;
             }
         }
 
         if (!$found) {
-            if ($helpInstance !== null && $this->argv[1] === '--help') {
-                $helpInstance->setArguments($this->argv);
-                $helpInstance->setInjectables($this->injectables);
-                $helpInstance->run();
-                return;
-            }
-
-            if ($defaultInstance !== null) {
-                $defaultInstance->setArguments($this->argv);
-                $defaultInstance->setInjectables($this->injectables);
-                $defaultInstance->run();
-                return;
-            }
-            $tpl = "\033[0;31m%s\033[0m";
-            echo PHP_EOL . sprintf($tpl, 'Valid command not found.') . PHP_EOL;
-            if (!empty($commands)) {
-                echo '    Valid commands are:' . PHP_EOL;
-            }
-            foreach ($commands as $single) {
-                echo '        ' . $single . PHP_EOL;
-            }
-            echo PHP_EOL . sprintf($tpl, '...exiting') . PHP_EOL;
-            throw new InvalidConsoleArgumentException();
+            throw new InvalidConsoleArgumentException(sprintf('Tried classes: %s', implode(', ', $triedClasses)));
         }
+    }
+
+    /**
+     * @param string $segment
+     * @return string
+     */
+    private function treatSegment($segment)
+    {
+        $segmentPiece = explode('-', $segment);
+        $s = '';
+        foreach ($segmentPiece as $seg) {
+            if (strlen($seg) === 0) {
+                continue;
+            }
+            $s .= ucfirst($seg);
+        }
+        return $s;
     }
 }

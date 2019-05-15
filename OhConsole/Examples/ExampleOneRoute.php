@@ -34,16 +34,11 @@ namespace OhConsole\Examples;
 
 use OhConsole\OhCommand;
 
-class ExampleTwo extends OhCommand
+class ExampleOneRoute extends OhCommand
 {
-    /**
-     * @var string
-     */
-    protected $command = 'ohconsole-example-two';
-
     public function run()
     {
-        $this->outputInfo('Running Example Two');
+        $this->outputInfo('Running Example One');
         $this->outputInfo('--------');
         $this->outputInfo('Single line');
         $this->outputInfo(array('This', 'is', 'an', 'array'));

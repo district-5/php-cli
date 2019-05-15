@@ -30,8 +30,20 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace OhConsole\Exception;
+namespace OhConsole\Examples;
 
-class NoCommandClassesGivenException extends \Exception
+use OhConsole\OhCommand;
+
+class ExampleTwoRoute extends OhCommand
 {
+    public function run()
+    {
+        $this->outputInfo('Running Example Two');
+        $this->outputInfo('--------');
+        $this->outputInfo('Single line');
+        $this->outputInfo(array('This', 'is', 'an', 'array'));
+        $this->outputError('Single error line!');
+        $this->outputError(array('This', 'is', 'also', 'an', 'array'));
+        $this->outputInfo('--------');
+    }
 }
