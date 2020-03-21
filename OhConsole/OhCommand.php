@@ -32,6 +32,9 @@
  */
 namespace OhConsole;
 
+use DateTime;
+use Exception;
+
 abstract class OhCommand
 {
     /**
@@ -111,45 +114,59 @@ abstract class OhCommand
     /**
      * Output information to the terminal, via a string, or optionally an array
      * @param string|array $content
-     * @param boolean $newLine (optional) default true
+     * @param bool $newLine (optional) default true
+     * @param bool $prependDate (optional) default false
      */
-    final public function outputInfo($content, $newLine = true)
+    public function outputInfo($content, $newLine = true, $prependDate = false)
     {
         if (is_array($content)) {
             foreach ($content as $string) {
-                echo $string;
-                if ($newLine) {
-                    echo PHP_EOL;
-                }
+                $this->echoLine($string, $newLine, $prependDate);
             }
         } else {
-            echo $content;
-            if ($newLine) {
-                echo PHP_EOL;
-            }
+            $this->echoLine($content, $newLine, $prependDate);
         }
     }
 
     /**
      * Output errors to the terminal, via a string, or optionally an array
      * @param string|array $content
-     * @param boolean $newLine (optional) default true
+     * @param bool $newLine (optional) default true
+     * @param bool $prependDate (optional) default false
      */
-    final public function outputError($content, $newLine = true)
+    public function outputError($content, $newLine = true, $prependDate = false)
     {
         $tpl = "\033[0;31m%s\033[0m";
         if (is_array($content)) {
             foreach ($content as $string) {
-                echo sprintf($tpl, $string);
-                if ($newLine) {
-                    echo PHP_EOL;
-                }
+                $this->echoLine(sprintf($tpl, $string), $newLine, $prependDate);
             }
         } else {
-            echo sprintf($tpl, $content);
-            if ($newLine) {
-                echo PHP_EOL;
+            $this->echoLine(sprintf($tpl, $content), $newLine, $prependDate);
+        }
+    }
+
+    /**
+     * @param string $content
+     * @param bool $newLine
+     * @param bool $prependDate
+     */
+    protected function echoLine($content, $newLine = true, $prependDate = false)
+    {
+        if ($prependDate === true) {
+            try {
+                $dt = new DateTime();
+                $content = sprintf(
+                    '%s - %s',
+                    $dt->format('Y-m-d H:i:s u'),
+                    $content
+                );
+            } catch (Exception $e) {
             }
+        }
+        echo $content;
+        if ($newLine) {
+            echo PHP_EOL;
         }
     }
 
