@@ -4,3 +4,5 @@ index.php
 .project
 .settings
 build
+vendor
+.idea
