@@ -35,7 +35,11 @@ namespace OhConsole;
 use OhConsole\Exception\ArgumentNotSetException;
 use OhConsole\Exception\InvalidConsoleArgumentException;
 
-
+/**
+ * Class OhConsole
+ * @noinspection PhpUnused
+ * @package OhConsole
+ */
 class OhConsole
 {
     /**
@@ -51,6 +55,7 @@ class OhConsole
     /**
      * Construct giving the argv variable
      *
+     * @noinspection PhpUnused
      * @param array $argv
      * @param array $injectables (optional) default empty array
      */
@@ -63,6 +68,7 @@ class OhConsole
     /**
      * Run the console command.
      *
+     * @noinspection PhpUnused
      * @throws ArgumentNotSetException
      * @throws InvalidConsoleArgumentException
      */

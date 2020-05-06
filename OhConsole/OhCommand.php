@@ -35,6 +35,10 @@ namespace OhConsole;
 use DateTime;
 use Exception;
 
+/**
+ * Class OhCommand
+ * @package OhConsole
+ */
 abstract class OhCommand
 {
     /**
@@ -67,6 +71,7 @@ abstract class OhCommand
 
     /**
      * Get an argv value, based on key
+     * @noinspection PhpUnused
      * @param integer|string $key
      * @return string|null
      */
@@ -81,7 +86,7 @@ abstract class OhCommand
 
     /**
      * Set the injectables array
-     * @param array $argv
+     * @param array $injectables
      */
     final public function setInjectables(array $injectables)
     {
@@ -99,6 +104,7 @@ abstract class OhCommand
 
     /**
      * Get an injectable based on key name
+     * @noinspection PhpUnused
      * @param integer|string $key
      * @return mixed|null
      */

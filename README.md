@@ -21,8 +21,9 @@ This file should contain something like this:
 
 ```php
 <?php
-include 'autoloader.php'; // Your autoloader.
+include 'vendor/autoload.php'; // Your autoloader.
 
+use OhConsole\OhConsole;
 // Map any injectables that you want to pass
 $injectables = array(
     'config' => array(
@@ -31,7 +32,7 @@ $injectables = array(
 );
 
 // Start OhConsole
-$command = new \OhConsole\OhConsole($argv, $injectables);
+$command = new OhConsole($argv, $injectables);
 
 // Run OhConsole
 $command->run();
@@ -59,7 +60,10 @@ autoloader instead.
 
 ```php
 <?php
-include 'autoloader.php';
+include 'vendor/autoload.php'; // Your autoloader.
+
+use OhConsole\OhConsole;
+
 include 'OhConsole/Examples/ExampleOneRoute.php';
 include 'OhConsole/Examples/ExampleTwoRoute.php';
 
@@ -71,6 +75,6 @@ $injectables = array(
     )
 );
 
-$command = new \OhConsole\OhConsole($argv, $injectables);
+$command = new OhConsole($argv, $injectables);
 $command->run();
 ```

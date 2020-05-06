@@ -32,6 +32,12 @@
  */
 namespace OhConsole\Exception;
 
-class InvalidConsoleArgumentException extends \Exception
+use Exception;
+
+/**
+ * Class InvalidConsoleArgumentException
+ * @package OhConsole\Exception
+ */
+class InvalidConsoleArgumentException extends Exception
 {
 }

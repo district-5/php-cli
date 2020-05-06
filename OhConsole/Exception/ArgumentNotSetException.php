@@ -32,6 +32,12 @@
  */
 namespace OhConsole\Exception;
 
-class ArgumentNotSetException extends \Exception
+use Exception;
+
+/**
+ * Class ArgumentNotSetException
+ * @package OhConsole\Exception
+ */
+class ArgumentNotSetException extends Exception
 {
 }

@@ -34,6 +34,11 @@ namespace OhConsole\Examples;
 
 use OhConsole\OhCommand;
 
+/**
+ * Class ExampleOneRoute
+ * @noinspection PhpUnused
+ * @package OhConsole\Examples
+ */
 class ExampleOneRoute extends OhCommand
 {
     public function run()
