@@ -1,19 +1,19 @@
 {
-    "name": "rogerthomas84/ohconsole",
-    "description": "OhConsole PHP CLI",
+    "name": "district-5/cli",
+    "description": "Easy to use CLI driven PHP applications.",
     "keywords": ["ohconsole"],
-    "homepage": "https://github.com/rogerthomas84/ohconsole",
-    "license": "MIT",
+    "homepage": "https://github.com/district-5/php-cli",
+    "license": "Proprietary",
     "authors": [
         {
             "name": "Roger Thomas",
-            "email": "rogere84@gmail.com"
+            "email": "roger.thomas@district5.co.uk"
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.1.0"
     },
     "autoload": {
-        "psr-0": { "OhConsole": "" }
+        "psr-4": { "District5\\Cli\\": "src/Cli/" }
     }
 }

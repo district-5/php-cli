@@ -1,56 +1,43 @@
 <?php
 /**
- * OhConsole - a simple console command line tool
+ * District5 - Cli
  *
- * @author      Roger Thomas <roger.thomas@rogerethomas.com>
- * @copyright   2013 Roger Thomas
- * @link        http://www.rogerethomas.com
- * @license     http://www.rogerethomas.com/license
- * @since       1.0.0
- * @package     OhConsole
+ * @copyright District5
  *
- * MIT LICENSE
+ * @author District5
+ * @author Roger Thomas <roger.thomas@district5.co.uk>
+ * @link https://www.district5.co.uk
  *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
+ * @license This software and associated documentation (the "Software") may not be
+ * used, copied, modified, distributed, published or licensed to any 3rd party
+ * without the written permission of District5 or its author.
  *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all licensed copies of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace OhConsole;
 
-use OhConsole\Exception\ArgumentNotSetException;
-use OhConsole\Exception\InvalidConsoleArgumentException;
+namespace District5\Cli;
+
+use District5\Cli\Exception\ArgumentNotSetException;
+use District5\Cli\Exception\InvalidConsoleArgumentException;
 
 /**
- * Class OhConsole
+ * Class Cli
  * @noinspection PhpUnused
- * @package OhConsole
+ * @package District5\Cli
  */
-class OhConsole
+class CliApp
 {
     /**
      * @var array
      */
-    private $argv = array();
+    private $argv;
 
     /**
      * @var array
      */
-    private $injectables = array();
+    private $injectables;
 
     /**
      * Construct giving the argv variable
@@ -59,7 +46,7 @@ class OhConsole
      * @param array $argv
      * @param array $injectables (optional) default empty array
      */
-    public function __construct(array $argv, array $injectables = array())
+    public function __construct(array $argv, array $injectables = [])
     {
         $this->argv = $argv;
         $this->injectables = $injectables;
@@ -103,7 +90,7 @@ class OhConsole
             }
 
             $instance = new $class();
-            if ($instance instanceof OhCommand) {
+            if ($instance instanceof CliCommand) {
                 $found = true;
                 $instance->setArguments($this->argv);
                 $instance->setInjectables($this->injectables);

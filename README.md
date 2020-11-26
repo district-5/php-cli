@@ -1,17 +1,37 @@
 [View on Packagist](https://packagist.org/packages/rogerthomas84/ohconsole)
 
-OhConsole
+District5\Cli
 =========
 
-OhConsole is a simple interface to create advanced PHP CLI applications by abstracting the commands into separated
+Originally from the [OhConsole](https://github.com/rogerthomas84/ohconsole) project.
+
+Cli is a simple interface to create advanced PHP CLI applications by abstracting the commands into separated
 classes.
+
+Composer
+-----------
+
+```json
+{
+    "repositories":[
+        {
+            "type": "vcs",
+            "url": "git@github.com:district-5/php-cli.git"
+        }
+    ],
+    "require": {
+        "district-5/cli": ">=3.0.1"
+    }
+}
+```
 
 Theory
 -----------
 
-Arguments are converted to namespaces. The final route class must be named `<your name>Route`;
+Arguments get converted to namespaces. The final route class must be appended with `Route`. So for example, a fully
+qualified class name of `SomeApp\Foo\Bar\ProcessMyTasksRoute` could be called with `some-app foo bar process-my-tasks`
 
-For example, the command `config get url` would look for a class of `Config\Get\UrlRoute`
+A much simpler example would be `Config\Get\UrlRoute` which would be called with `config get url`
 
 Quick Start
 -----------
@@ -21,9 +41,8 @@ This file should contain something like this:
 
 ```php
 <?php
-include 'vendor/autoload.php'; // Your autoloader.
+use District5\Cli\CliApp;
 
-use OhConsole\OhConsole;
 // Map any injectables that you want to pass
 $injectables = array(
     'config' => array(
@@ -31,10 +50,10 @@ $injectables = array(
     )
 );
 
-// Start OhConsole
-$command = new OhConsole($argv, $injectables);
+// Start CliApp
+$command = new CliApp($argv, $injectables);
 
-// Run OhConsole
+// Run CliApp
 $command->run();
 ```
 
@@ -44,28 +63,42 @@ $command->run();
 Examples
 --------
 
-* [Example Command One](/OhConsole/Examples/ExampleOneRoute.php)
-* [Example Command Two](/OhConsole/Examples/ExampleTwoRoute.php)
+```php
+<?php
+namespace MyApp;
+
+use District5\Cli\CliCommand;
+
+/**
+ * Class ExampleOneRoute
+ */
+class ExampleOneRoute extends CliCommand
+{
+    public function run()
+    {
+        $this->outputInfo('Running Example One');
+        $this->outputInfo('--------');
+        $this->outputInfo('Single line');
+        $this->outputInfo(array('This', 'is', 'an', 'array'));
+        $this->outputError('Single error line!');
+        $this->outputError(array('This', 'is', 'also', 'an', 'array'));
+        $this->outputInfo('--------');
+    }
+}
+```
 
 Once you've got your example set up, call your main script (see below) and pass one of the commands defined in the PHP
 files.
 
-```sh
-php bin/console ohconsole examples one
-php bin/console ohconsole examples two
+```bash
+php ./console.php my-app example-one
 ```
 
-Here's a sample `script` that you can use to get started. Feel free to replace the `include`'s with your 
-autoloader instead.
+Here's a sample `console.php` that you can use to get started.
 
 ```php
 <?php
-include 'vendor/autoload.php'; // Your autoloader.
-
-use OhConsole\OhConsole;
-
-include 'OhConsole/Examples/ExampleOneRoute.php';
-include 'OhConsole/Examples/ExampleTwoRoute.php';
+use District5\Cli\CliApp;
 
 $injectables = array(
     'config' => array(
@@ -75,6 +108,6 @@ $injectables = array(
     )
 );
 
-$command = new OhConsole($argv, $injectables);
+$command = new CliApp($argv, $injectables);
 $command->run();
 ```
