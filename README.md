@@ -51,13 +51,11 @@ $injectables = array(
 );
 
 // Start CliApp
-$command = new CliApp($argv, $injectables);
+$command = CliApp::createApp($argv, $injectables); // or `$command = new CliApp($argv, $injectables);`
 
 // Run CliApp
 $command->run();
 ```
-
-
 
 
 Examples
@@ -83,6 +81,10 @@ class ExampleOneRoute extends CliCommand
         $this->outputError('Single error line!');
         $this->outputError(array('This', 'is', 'also', 'an', 'array'));
         $this->outputInfo('--------');
+        
+        if ($this->getArgument(0) !== null) {
+            $this->outputInfo('You sent in: ' . $this->getArgument(0));
+        }
     }
 }
 ```
@@ -94,7 +96,33 @@ files.
 php ./console.php my-app example-one
 ```
 
-Here's a sample `console.php` that you can use to get started.
+### Adding some arguments..
+
+There are two different argument types you can pass into this script.
+* Simple - Numeric - `./script.php command arg1 arg2 ...`
+  * Retrievable with `getArgument(0)` and `getArgument(1)`
+* Advanced - Named - `./script.php command --foo=bar --hello=world ...`
+  * Arguments are processed by `CliArgvs`. You can retrieve this object in your command by calling `getCliArgvs`
+  * Retrievable with `getArgument('foo')` and `getArgument('hello')`
+  * You can chain these into an array and calling `getArgument('foo')` would return an array.
+    * `./script.php command --foo=bar --foo=another --foo=andAnother`
+
+To send arguments into the route, simply append them. For example, appending `hello` onto the end of the above script
+would allow you to use the `getArgument(0)` method within the command to retrieve the parameter.
+
+* In the route:
+    ```php
+    if ($this->getArgument(0) !== null) {
+        $this->outputInfo('You passed in: ' . $this->getArgument(0));
+    }
+    ```
+
+* Bash:
+    ```bash
+    php ./console.php my-app example-one hello
+    ```
+
+Here's a sample `console.php` that you could use to get started.
 
 ```php
 <?php
@@ -108,6 +136,6 @@ $injectables = array(
     )
 );
 
-$command = new CliApp($argv, $injectables);
+$command = CliApp::createApp($argv, $injectables);
 $command->run();
 ```

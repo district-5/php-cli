@@ -23,21 +23,28 @@ use District5\Cli\Exception\ArgumentNotSetException;
 use District5\Cli\Exception\InvalidConsoleArgumentException;
 
 /**
- * Class Cli
+ * Class CliApp
  * @noinspection PhpUnused
  * @package District5\Cli
  */
 class CliApp
 {
     /**
-     * @var array
+     * Static variable, holding the instance of this Singleton.
+     *
+     * @var CliApp|null
      */
-    private $argv;
+    protected static $_instance = null;
 
     /**
      * @var array
      */
-    private $injectables;
+    private $argv = [];
+
+    /**
+     * @var array
+     */
+    private $injectables = [];
 
     /**
      * Construct giving the argv variable
@@ -53,71 +60,59 @@ class CliApp
     }
 
     /**
+     * @return array
+     */
+    public function getCliArguments(): array
+    {
+        return $this->argv;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCliInjectables(): array
+    {
+        return $this->injectables;
+    }
+
+    /**
      * Run the console command.
      *
      * @noinspection PhpUnused
      * @throws ArgumentNotSetException
      * @throws InvalidConsoleArgumentException
      */
-    public function run()
+    public function run(): ?CliCommand
     {
         if (!array_key_exists(1, $this->argv)) {
             throw new ArgumentNotSetException('Argument not passed.');
         }
 
-        $newArray = array_merge([], $this->argv);
-        unset($newArray[0]);
-        $proposedClassNames = [];
-        $rolling = '\\';
-        $tryLength = 0;
-        foreach ($newArray as $_ => $segment) {
-            $tryLength++;
-            $rolling .= $this->treatSegment($segment);
-            if ($tryLength > 1) {
-                if (class_exists($rolling . 'Route')) {
-                    $proposedClassNames[] = $rolling . 'Route';
-                }
-            }
-            $rolling .= '\\';
+        if (null === $command = CliRouter::getClassForRoute($this->argv, $this->injectables)) {
+            throw new InvalidConsoleArgumentException(
+                sprintf(
+                    'Could not find appropriate command for: %s',
+                    implode(' ', $this->argv)
+                )
+            );
         }
 
-        $triedClasses = [];
-        $found = false;
-        foreach (array_reverse($proposedClassNames) as $class) {
-            if (!class_exists($class)) {
-                $triedClasses[] = $class;
-                continue;
-            }
-
-            $instance = new $class();
-            if ($instance instanceof CliCommand) {
-                $found = true;
-                $instance->setArguments($this->argv);
-                $instance->setInjectables($this->injectables);
-                $instance->run();
-                break;
-            }
-        }
-
-        if (!$found) {
-            throw new InvalidConsoleArgumentException(sprintf('Tried classes: %s', implode(', ', $triedClasses)));
-        }
+        $command->run();
+        return $command;
     }
 
     /**
-     * @param string $segment
-     * @return string
+     * Retrieve an instance of the given class.
+     *
+     * @param array|null $argv
+     * @param array|null $injectables
+     * @return $this
      */
-    private function treatSegment($segment)
+    public static function createApp(array $argv = null, array $injectables = null): CliApp
     {
-        $segmentPiece = explode('-', $segment);
-        $s = '';
-        foreach ($segmentPiece as $seg) {
-            if (strlen($seg) === 0) {
-                continue;
-            }
-            $s .= ucfirst($seg);
+        if (null !== $argv && null !== $injectables) {
+            static::$_instance = new static($argv, $injectables);
         }
-        return $s;
+        return static::$_instance;
     }
 }

@@ -39,6 +39,11 @@ abstract class CliCommand
     protected $injectables = array();
 
     /**
+     * @var CliArgvs
+     */
+    private $cliArgvs = null;
+
+    /**
      * Set the argv array
      * @param array $argv
      */
@@ -58,14 +63,18 @@ abstract class CliCommand
 
     /**
      * Get an argv value, based on key
+     *
      * @noinspection PhpUnused
-     * @param integer|string $key
-     * @return string|null
+     * @param int|string $key
+     * @return string|array|null
      */
     final public function getArgument($key)
     {
-        if (array_key_exists($key, $this->getArguments())) {
+        if (is_int($key) && array_key_exists($key, $this->getArguments())) {
             return $this->argv[$key];
+        }
+        if (is_string($key)) {
+            return $this->cliArgvs->getArg($key);
         }
 
         return null;
@@ -92,7 +101,7 @@ abstract class CliCommand
     /**
      * Get an injectable based on key name
      * @noinspection PhpUnused
-     * @param integer|string $key
+     * @param int|string $key
      * @return mixed|null
      */
     final public function getInjectable($key)
@@ -164,4 +173,22 @@ abstract class CliCommand
     }
 
     abstract function run();
+
+    /**
+     * @param CliArgvs|null $cliArgvs
+     * @return $this
+     */
+    public function setCliArgvs(?CliArgvs $cliArgvs)
+    {
+        $this->cliArgvs = $cliArgvs;
+        return $this;
+    }
+
+    /**
+     * @return CliArgvs|null
+     */
+    public function getCliArgvs(): ?CliArgvs
+    {
+        return $this->cliArgvs;
+    }
 }
