@@ -99,11 +99,15 @@ class CliArgvsTest extends TestCase
         $this->assertCount(1, $arguments);
         $this->assertEquals('Joe', $inst->getArg('--name'));
         $this->assertTrue($inst->hasHelp());
+        $this->assertTrue($inst->hasFlag('help'));
+        $this->assertTrue($inst->hasFlag('-help'));
+        $this->assertTrue($inst->hasFlag('--help'));
 
         $argsTwo = [
             'foo.php',
             '--name=Joe',
-            '--help'
+            '--help',
+            '--force'
         ];
         $instTwo = CliArgvs::getInstance($argsTwo, count($argsTwo));
         $arguments = $instTwo->getArgs();
@@ -112,5 +116,8 @@ class CliArgvsTest extends TestCase
         $this->assertCount(1, $arguments);
         $this->assertEquals('Joe', $instTwo->getArg('--name'));
         $this->assertTrue($instTwo->hasHelp());
+        $this->assertTrue($instTwo->hasFlag('force'));
+        $this->assertTrue($instTwo->hasFlag('-force'));
+        $this->assertTrue($instTwo->hasFlag('--force'));
     }
 }
