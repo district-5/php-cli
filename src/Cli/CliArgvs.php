@@ -103,7 +103,7 @@ class CliArgvs
 
         foreach ($args as $arg) {
             if (strstr($arg, '=') === false) {
-                if (in_array('help', ['help', '--help', '-help'])) {
+                if (in_array($arg, ['help', '--help', '-help'])) {
                     $this->help = true;
                 }
                 if ($this->stripDashes === true) {
