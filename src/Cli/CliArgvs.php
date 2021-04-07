@@ -67,6 +67,11 @@ class CliArgvs
     protected $stripDashes = true;
 
     /**
+     * @var array
+     */
+    protected $flags = [];
+
+    /**
      * Construct the instance, protected to avoid `new` instances. Passing in
      * the raw $args, $num of $args and whether leading dashes should also be
      * removed.
@@ -100,6 +105,12 @@ class CliArgvs
             if (strstr($arg, '=') === false) {
                 if (in_array('help', ['help', '--help', '-help'])) {
                     $this->help = true;
+                }
+                if ($this->stripDashes === true) {
+                    $arg = ltrim($arg, '-');
+                }
+                if (!in_array($arg, $this->flags)) {
+                    $this->flags[] = $arg;
                 }
                 continue;
             }
@@ -180,6 +191,18 @@ class CliArgvs
     public function hasHelp()
     {
         return $this->help;
+    }
+
+    /**
+     * @param string $flag
+     * @return bool
+     */
+    public function hasFlag(string $flag)
+    {
+        if ($this->stripDashes === true) {
+            $flag = ltrim($flag, '-');
+        }
+        return in_array($flag, $this->flags);
     }
 
     /**
