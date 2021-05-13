@@ -10,12 +10,12 @@ class CliRouterTest extends TestCase
     {
         $command = 'foo.php';
         $arguments = explode(' ', $command);
-        $instance = CliRouter::getClassForRoute($arguments, []);
+        $instance = CliRouter::getClassForRoute($arguments, [], 'Route');
         $this->assertNull($instance);
 
         $commandTwo = 'foo.php bar hello';
         $argumentsTwo = explode(' ', $commandTwo);
-        $instanceTwo = CliRouter::getClassForRoute($argumentsTwo, []);
+        $instanceTwo = CliRouter::getClassForRoute($argumentsTwo, [], 'Route');
         $this->assertNull($instanceTwo);
     }
 
@@ -23,7 +23,7 @@ class CliRouterTest extends TestCase
     {
         $command = 'foo.php cli-examples route-one';
         $arguments = explode(' ', $command);
-        $instance = CliRouter::getClassForRoute($arguments, []);
+        $instance = CliRouter::getClassForRoute($arguments, [], 'Route');
         $this->assertNotNull($instance);
         $this->assertEquals('RouteOneRoute', $instance->run());
         $this->assertCount(0, $instance->getArguments());
@@ -33,7 +33,7 @@ class CliRouterTest extends TestCase
     {
         $command = 'foo.php cli-examples two';
         $arguments = explode(' ', $command);
-        $instance = CliRouter::getClassForRoute($arguments, []);
+        $instance = CliRouter::getClassForRoute($arguments, [], 'Route');
         $this->assertNotNull($instance);
         $this->assertEquals('TwoRoute', $instance->run());
         $this->assertCount(0, $instance->getArguments());
@@ -43,7 +43,7 @@ class CliRouterTest extends TestCase
     {
         $command = 'foo.php cli-examples route-one foo bar';
         $arguments = explode(' ', $command);
-        $instance = CliRouter::getClassForRoute($arguments, []);
+        $instance = CliRouter::getClassForRoute($arguments, [], 'Route');
         $this->assertNotNull($instance);
         $this->assertNotEmpty($instance->getArguments());
         $this->assertCount(2, $instance->getArguments());
@@ -57,7 +57,7 @@ class CliRouterTest extends TestCase
     {
         $command = 'foo.php cli-examples two hello world --foo=bar --joe=bloggs';
         $arguments = explode(' ', $command);
-        $instance = CliRouter::getClassForRoute($arguments, []);
+        $instance = CliRouter::getClassForRoute($arguments, [], 'Route');
         $this->assertNotNull($instance);
         $this->assertNotEmpty($instance->getArguments());
         $this->assertCount(4, $instance->getArguments());

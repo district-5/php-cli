@@ -44,17 +44,22 @@ This file should contain something like this:
 use District5\Cli\CliApp;
 
 // Map any injectables that you want to pass
-$injectables = array(
-    'config' => array(
+$injectables = [
+    'config' => [
         // Put any configuration here.
-    )
-);
+    ]
+];
 
 // Start CliApp
-$command = CliApp::createApp($argv, $injectables); // or `$command = new CliApp($argv, $injectables);`
+$cliApp = CliApp::createApp($argv, $injectables); // or `$command = new CliApp($argv, $injectables);`
+
+// Optionally, to support PSR-4 namespaces you can set a namespace prefix:
+// $cliApp->setPsrNamespacePrefix('FooBar');
+
+// By default, routes appended with 'Route' will be looked for. You can change this to be something else:
 
 // Run CliApp
-$command->run();
+$cliApp->run();
 ```
 
 
@@ -128,14 +133,14 @@ Here's a sample `console.php` that you could use to get started.
 <?php
 use District5\Cli\CliApp;
 
-$injectables = array(
-    'config' => array(
+$injectables = [
+    'config' => [
         'db.name' => 'MyDatabaseName',
         'db.user' => 'root',
         'db.password' => 'password',
-    )
-);
+    ]
+];
 
-$command = CliApp::createApp($argv, $injectables);
-$command->run();
+$cliApp = CliApp::createApp($argv, $injectables);
+$cliApp->run();
 ```

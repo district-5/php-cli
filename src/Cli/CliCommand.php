@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * District5 - Cli
  *
@@ -31,12 +32,12 @@ abstract class CliCommand
     /**
      * @var array
      */
-    protected $argv = array();
+    protected $argv = [];
 
     /**
      * @var array
      */
-    protected $injectables = array();
+    protected $injectables = [];
 
     /**
      * @var CliArgvs
@@ -56,7 +57,7 @@ abstract class CliCommand
      * Get the argv array
      * @return array
      */
-    final public function getArguments()
+    final public function getArguments(): array
     {
         return $this->argv;
     }
@@ -93,7 +94,7 @@ abstract class CliCommand
      * Get the injectables array
      * @return array
      */
-    final public function getInjectables()
+    final public function getInjectables(): array
     {
         return $this->injectables;
     }
@@ -119,7 +120,7 @@ abstract class CliCommand
      * @param bool $newLine (optional) default true
      * @param bool $prependDate (optional) default false
      */
-    public function outputInfo($content, $newLine = true, $prependDate = false)
+    public function outputInfo($content, bool $newLine = true, bool $prependDate = false)
     {
         if (is_array($content)) {
             foreach ($content as $string) {
@@ -136,7 +137,7 @@ abstract class CliCommand
      * @param bool $newLine (optional) default true
      * @param bool $prependDate (optional) default false
      */
-    public function outputError($content, $newLine = true, $prependDate = false)
+    public function outputError($content, bool $newLine = true, bool $prependDate = false)
     {
         $tpl = "\033[0;31m%s\033[0m";
         if (is_array($content)) {
@@ -153,7 +154,7 @@ abstract class CliCommand
      * @param bool $newLine
      * @param bool $prependDate
      */
-    protected function echoLine($content, $newLine = true, $prependDate = false)
+    protected function echoLine(string $content, bool $newLine = true, bool $prependDate = false)
     {
         if ($prependDate === true) {
             try {
@@ -178,7 +179,7 @@ abstract class CliCommand
      * @param CliArgvs|null $cliArgvs
      * @return $this
      */
-    public function setCliArgvs(?CliArgvs $cliArgvs)
+    public function setCliArgvs(?CliArgvs $cliArgvs): CliCommand
     {
         $this->cliArgvs = $cliArgvs;
         return $this;

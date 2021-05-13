@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 /**
  * District5 - Cli
  *
@@ -39,12 +40,22 @@ class CliApp
     /**
      * @var array
      */
-    private $argv = [];
+    private $argv;
 
     /**
      * @var array
      */
-    private $injectables = [];
+    private $injectables;
+
+    /**
+     * @var string|null
+     */
+    private $nsPrefix = null;
+
+    /**
+     * @var string
+     */
+    private $clzAppend = 'Route';
 
     /**
      * Construct giving the argv variable
@@ -88,7 +99,7 @@ class CliApp
             throw new ArgumentNotSetException('Argument not passed.');
         }
 
-        if (null === $command = CliRouter::getClassForRoute($this->argv, $this->injectables)) {
+        if (null === $command = CliRouter::getClassForRoute($this->argv, $this->injectables, $this->clzAppend, $this->nsPrefix)) {
             throw new InvalidConsoleArgumentException(
                 sprintf(
                     'Could not find appropriate command for: %s',
@@ -114,5 +125,25 @@ class CliApp
             static::$_instance = new static($argv, $injectables);
         }
         return static::$_instance;
+    }
+
+    /**
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPsrNamespacePrefix(string $prefix): CliApp
+    {
+        $this->nsPrefix = $prefix;
+        return $this;
+    }
+
+    /**
+     * @param string $append
+     * @return $this
+     */
+    public function setRouteAppend(string $append): CliApp
+    {
+        $this->clzAppend = $append;
+        return $this;
     }
 }

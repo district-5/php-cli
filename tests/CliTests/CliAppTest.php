@@ -32,10 +32,51 @@ class CliAppTest extends TestCase
         $this->assertEquals($originalArguments, $otherInstance->getCliArguments());
     }
 
+    public function testPrefixedNamespaceValidRouter()
+    {
+        $originalArguments = ['foo.php', 'prefixed-example'];//, 'two'];
+        $instance = CliApp::createApp(
+            $originalArguments,
+            []
+        )->setPsrNamespacePrefix(
+            'FooBar'
+        );
+        $command = $instance->run();
+        $this->assertEquals('The prefixed namespace example works.', $command->getResult());
+    }
+
+    public function testPrefixedNamespaceWithDifferentAppendOnClassValidRouter()
+    {
+        $originalArguments = ['foo.php', 'prefixed-example'];//, 'two'];
+        $instance = CliApp::createApp(
+            $originalArguments,
+            []
+        )->setPsrNamespacePrefix(
+            'FooBar'
+        )->setRouteAppend(
+            'Joe'
+        );
+        $command = $instance->run();
+        $this->assertEquals('This is Joe!', $command->getResult());
+    }
+
     public function testStaticValidRouterWithExtraArguments()
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];
         $instance = CliApp::createApp($originalArguments, []);
+        $command = $instance->run();
+
+        $this->assertEquals(['hello', 'world'], $command->getArguments());
+
+        $otherInstance = CliApp::createApp();
+        $this->assertEquals($originalArguments, $otherInstance->getCliArguments());
+    }
+
+    public function testStaticValidRouterWithExtraArgumentsAndCustomAppend()
+    {
+        $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];
+        $instance = CliApp::createApp($originalArguments, []);
+        $instance->setRouteAppend('Foo');
         $command = $instance->run();
 
         $this->assertEquals(['hello', 'world'], $command->getArguments());

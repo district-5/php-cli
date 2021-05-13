@@ -80,7 +80,7 @@ class CliArgvs
      * @param int|null $num
      * @param bool $stripLeadingDashes (optional) default true.
      */
-    protected function __construct(array $args = null, $num = null, $stripLeadingDashes = true)
+    protected function __construct(array $args = null, int $num = null, bool $stripLeadingDashes = true)
     {
         if (is_array($args) && count($args) === $num) {
             $this->stripDashes = $stripLeadingDashes;
@@ -94,7 +94,7 @@ class CliArgvs
      * @param array $args
      * @return int
      */
-    protected function processArguments(array $args)
+    protected function processArguments(array $args): int
     {
         if (count($args) > 0) {
             $this->script = $args[0];
@@ -129,7 +129,7 @@ class CliArgvs
      * @param string $val
      * @return string
      */
-    protected function removeLeadingDash($val)
+    protected function removeLeadingDash(string $val): string
     {
         if (substr($val, 0, 2) === '--') {
             $val = substr($val, 2);
@@ -143,11 +143,11 @@ class CliArgvs
      * Add a single argument to the stack.
      *
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      * @return $this
      * @example $inst->addArg('foo', 'bar');
      */
-    public function addArg($key, $value)
+    public function addArg(string $key, $value): CliArgvs
     {
         if ($this->stripDashes === true) {
             $key = $this->removeLeadingDash($key);
@@ -167,7 +167,7 @@ class CliArgvs
      *      // etc...
      * ]
      */
-    public function getArgs()
+    public function getArgs(): array
     {
         return $this->args;
     }
@@ -178,7 +178,7 @@ class CliArgvs
      * @return string
      * @example 'my-script.php'
      */
-    public function getScript()
+    public function getScript(): ?string
     {
         return $this->script;
     }
@@ -188,7 +188,7 @@ class CliArgvs
      *
      * @return bool
      */
-    public function hasHelp()
+    public function hasHelp(): bool
     {
         return $this->help;
     }
@@ -197,7 +197,7 @@ class CliArgvs
      * @param string $flag
      * @return bool
      */
-    public function hasFlag(string $flag)
+    public function hasFlag(string $flag): bool
     {
         if ($this->stripDashes === true) {
             $flag = ltrim($flag, '-');
@@ -214,7 +214,7 @@ class CliArgvs
      * @param bool $uniqueValues (optional) whether to remove duplicate values
      * @return string|array|null
      */
-    public function getArg($key, $uniqueValues = false)
+    public function getArg(string $key, bool $uniqueValues = false)
     {
         if ($this->stripDashes === true) {
             $key = $this->removeLeadingDash($key);
@@ -228,7 +228,7 @@ class CliArgvs
             return $this->tmp[$cacheKey];
         }
         $matches = [];
-        foreach ($this->getArgs() as $n => $argument) {
+        foreach ($this->getArgs() as $argument) {
             if (!array_key_exists($key, $argument)) {
                 continue;
             }
@@ -256,7 +256,7 @@ class CliArgvs
      * @param int|null $num
      * @param bool $stripLeadingDashes (optional) default false.
      */
-    public function clear(array $args = null, $num = null, $stripLeadingDashes = true)
+    public function clear(array $args = null, int $num = null, bool $stripLeadingDashes = true)
     {
         $this->args = [];
         $this->tmp = [];
@@ -281,7 +281,7 @@ class CliArgvs
      * @param bool $stripLeadingDashes (optional) default true.
      * @return CliArgvs
      */
-    public static function getInstance(array $args = null, $num = null, $stripLeadingDashes = true)
+    public static function getInstance(array $args = null, int $num = null, bool $stripLeadingDashes = true): ?CliArgvs
     {
         if (null === static::$_instance) {
             static::$_instance = new static($args, $num, $stripLeadingDashes);

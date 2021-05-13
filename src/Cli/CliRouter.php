@@ -19,9 +19,6 @@
 
 namespace District5\Cli;
 
-use District5\Cli\Exception\ArgumentNotSetException;
-use District5\Cli\Exception\InvalidConsoleArgumentException;
-
 /**
  * Class CliRouter
  * @noinspection PhpUnused
@@ -35,9 +32,11 @@ class CliRouter
      * @noinspection PhpUnused
      * @param array $argv
      * @param array $injectables
+     * @param string $clzAppend
+     * @param string|null $psrNamespacePrefix
      * @return CliCommand|null
      */
-    public static function getClassForRoute(array $argv, array $injectables)
+    public static function getClassForRoute(array $argv, array $injectables, string $clzAppend, string $psrNamespacePrefix = null): ?CliCommand
     {
         if (!array_key_exists(1, $argv)) {
             return null;
@@ -46,17 +45,34 @@ class CliRouter
         $newArray = array_merge([], $argv);
         unset($newArray[0]);
         $proposedClassNames = [];
-        $rolling = '\\';
+        $rollingNormal = '\\';
+        $rollingPrefixed = '\\';
+        if ($psrNamespacePrefix !== null) {
+            $rollingPrefixed .= $psrNamespacePrefix . '\\';
+        }
         $tryLength = 0;
-        foreach ($newArray as $_ => $segment) {
+        foreach ($newArray as $segment) {
             $tryLength++;
-            $rolling .= self::treatSegment($segment);
-            if ($tryLength > 1) {
-                if (class_exists($rolling . 'Route')) {
-                    $proposedClassNames[$rolling . 'Route'] = $tryLength;
+
+            $rollingNormal .= self::treatSegment($segment);
+            if ($psrNamespacePrefix !== null) {
+                $rollingPrefixed .= self::treatSegment($segment);
+            }
+
+            if ($tryLength > 0) {
+                $normalClassName = $rollingNormal . $clzAppend;
+                if ($psrNamespacePrefix !== null) {
+                    $normalClassName = $rollingPrefixed . $clzAppend;
+                }
+
+                if (class_exists($normalClassName)) {
+                    $proposedClassNames[$normalClassName] = $tryLength;
+                } else {
+                    $attemptedClassNames[] = $normalClassName;
                 }
             }
-            $rolling .= '\\';
+            $rollingNormal .= '\\';
+            $rollingPrefixed .= '\\';
         }
 
         foreach (array_reverse($proposedClassNames) as $class => $offsetLength) {
@@ -84,7 +100,7 @@ class CliRouter
      * @param string $segment
      * @return string
      */
-    protected static function treatSegment(string $segment)
+    protected static function treatSegment(string $segment): string
     {
         $segmentPiece = explode('-', $segment);
         $s = '';

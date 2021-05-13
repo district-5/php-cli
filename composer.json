@@ -21,7 +21,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "District5\\CliTests\\": "tests/CliTests/"
+            "District5\\CliTests\\": "tests/CliTests/",
+            "FooBar\\": "tests/CliNamespacePrefixed/"
         },
         "psr-0": {
             "CliExamples\\": "tests/"
