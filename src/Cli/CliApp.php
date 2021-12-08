@@ -140,8 +140,19 @@ class CliApp
     /**
      * @param string $append
      * @return $this
+     * @deprecated - Use setClassAppend instead
+     * @see CliApp::setClassAppend()
      */
     public function setRouteAppend(string $append): CliApp
+    {
+        return $this->setClassAppend($append);
+    }
+
+    /**
+     * @param string $append
+     * @return $this
+     */
+    public function setClassAppend(string $append): CliApp
     {
         $this->clzAppend = $append;
         return $this;

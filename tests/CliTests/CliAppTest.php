@@ -53,7 +53,7 @@ class CliAppTest extends TestCase
             []
         )->setPsrNamespacePrefix(
             'FooBar'
-        )->setRouteAppend(
+        )->setClassAppend(
             'Joe'
         );
         $command = $instance->run();
@@ -76,7 +76,7 @@ class CliAppTest extends TestCase
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];
         $instance = CliApp::createApp($originalArguments, []);
-        $instance->setRouteAppend('Foo');
+        $instance->setClassAppend('Foo');
         $command = $instance->run();
 
         $this->assertEquals(['hello', 'world'], $command->getArguments());

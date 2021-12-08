@@ -57,7 +57,7 @@ $cliApp = CliApp::createApp($argv, $injectables); // or `$command = new CliApp($
 // $cliApp->setPsrNamespacePrefix('FooBar');
 
 // By default, routes appended with 'Route' will be looked for. You can change this to be something else:
-// $cliApp->setRouteAppend('Command'); // would look for a class called 'XxxxxCommand'
+// $cliApp->setClassAppend('Command'); // would look for a class called 'XxxxxCommand'
 
 // Run CliApp
 $cliApp->run();
