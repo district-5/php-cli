@@ -20,7 +20,7 @@ Composer
         }
     ],
     "require": {
-        "district-5/cli": ">=3.0.1"
+        "district-5/cli": "*"
     }
 }
 ```
