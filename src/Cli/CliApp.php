@@ -35,27 +35,27 @@ class CliApp
      *
      * @var CliApp|null
      */
-    protected static $_instance = null;
+    protected static ?CliApp $_instance = null;
 
     /**
      * @var array
      */
-    private $argv;
+    private array $argv;
 
     /**
      * @var array
      */
-    private $injectables;
+    private array $injectables;
 
     /**
      * @var string|null
      */
-    private $nsPrefix = null;
+    private ?string $nsPrefix = null;
 
     /**
      * @var string
      */
-    private $clzAppend = 'Route';
+    private string $clzAppend = 'Route';
 
     /**
      * Construct giving the argv variable

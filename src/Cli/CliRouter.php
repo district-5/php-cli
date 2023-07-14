@@ -67,9 +67,11 @@ class CliRouter
 
                 if (class_exists($normalClassName)) {
                     $proposedClassNames[$normalClassName] = $tryLength;
-                } else {
-                    $attemptedClassNames[] = $normalClassName;
                 }
+                // else {
+                //     /** @noinspection PhpArrayUsedOnlyForWriteInspection */
+                //     $attemptedClassNames[] = $normalClassName;
+                // }
             }
             $rollingNormal .= '\\';
             $rollingPrefixed .= '\\';

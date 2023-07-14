@@ -1,11 +1,22 @@
 <?php
+/**
+ * @noinspection SpellCheckingInspection
+ */
+
 namespace District5\CliTests;
 
 use District5\Cli\CliArgvs;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class CliArgvsTest
+ * @package District5\CliTests
+ */
 class CliArgvsTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testNormal()
     {
         $args = [
@@ -23,6 +34,9 @@ class CliArgvsTest extends TestCase
         $this->assertEquals('23', $inst->getArg('--age'));
     }
 
+    /**
+     * @return void
+     */
     public function testNormalRemoveLeadingDashes()
     {
         $args = [
@@ -44,6 +58,9 @@ class CliArgvsTest extends TestCase
         $this->assertEquals('23', $inst->getArg('--age'));
     }
 
+    /**
+     * @return void
+     */
     public function testDuplicateKeys()
     {
         $args = [
@@ -66,6 +83,9 @@ class CliArgvsTest extends TestCase
         $this->assertContains('Jane', $inst->getArg('--name'));
     }
 
+    /**
+     * @return void
+     */
     public function testDuplicateValues()
     {
         $args = [
@@ -85,6 +105,9 @@ class CliArgvsTest extends TestCase
         $this->assertEquals('Joe', $inst->getArg('--name', true));
     }
 
+    /**
+     * @return void
+     */
     public function testHelpFunction()
     {
         $args = [

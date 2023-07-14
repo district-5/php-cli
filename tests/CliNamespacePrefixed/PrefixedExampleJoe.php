@@ -12,7 +12,7 @@ class PrefixedExampleJoe extends CliCommand
     /**
      * @var string
      */
-    private $result;
+    private string $result;
 
     /**
      * @return string

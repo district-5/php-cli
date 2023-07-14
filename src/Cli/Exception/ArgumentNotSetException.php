@@ -19,12 +19,10 @@
 
 namespace District5\Cli\Exception;
 
-use Exception;
-
 /**
  * Class ArgumentNotSetException
  * @package District5\Cli\Exception
  */
-class ArgumentNotSetException extends Exception
+class ArgumentNotSetException extends BaseCliException
 {
 }

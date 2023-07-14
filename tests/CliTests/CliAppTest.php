@@ -6,8 +6,17 @@ use District5\Cli\Exception\ArgumentNotSetException;
 use District5\Cli\Exception\InvalidConsoleArgumentException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class CliAppTest
+ * @package District5\CliTests
+ */
 class CliAppTest extends TestCase
 {
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testInvalidRouter()
     {
         $this->expectException(ArgumentNotSetException::class);
@@ -15,6 +24,11 @@ class CliAppTest extends TestCase
         $command->run();
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testStaticInvalidRouter()
     {
         $this->expectException(InvalidConsoleArgumentException::class);
@@ -22,6 +36,11 @@ class CliAppTest extends TestCase
         $instance->run();
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testStaticValidRouter()
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two'];
@@ -32,6 +51,11 @@ class CliAppTest extends TestCase
         $this->assertEquals($originalArguments, $otherInstance->getCliArguments());
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testPrefixedNamespaceValidRouter()
     {
         $originalArguments = ['foo.php', 'prefixed-example'];//, 'two'];
@@ -45,6 +69,11 @@ class CliAppTest extends TestCase
         $this->assertEquals('The prefixed namespace example works.', $command->getResult());
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testPrefixedNamespaceWithDifferentAppendOnClassValidRouter()
     {
         $originalArguments = ['foo.php', 'prefixed-example'];//, 'two'];
@@ -60,6 +89,11 @@ class CliAppTest extends TestCase
         $this->assertEquals('This is Joe!', $command->getResult());
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testStaticValidRouterWithExtraArguments()
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];
@@ -72,6 +106,11 @@ class CliAppTest extends TestCase
         $this->assertEquals($originalArguments, $otherInstance->getCliArguments());
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testStaticValidRouterWithExtraArgumentsAndCustomAppend()
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];
@@ -85,6 +124,11 @@ class CliAppTest extends TestCase
         $this->assertEquals($originalArguments, $otherInstance->getCliArguments());
     }
 
+    /**
+     * @return void
+     * @throws ArgumentNotSetException
+     * @throws InvalidConsoleArgumentException
+     */
     public function testOverwriteStaticValidRouterWithExtraArguments()
     {
         $originalArguments = ['foo.php', 'cli-examples', 'two', 'hello', 'world'];

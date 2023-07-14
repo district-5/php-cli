@@ -1,4 +1,8 @@
 <?php
+/**
+ * @noinspection SpellCheckingInspection
+ */
+
 namespace District5\Cli;
 
 /**
@@ -9,9 +13,9 @@ class CliArgvs
     /**
      * Holds the static instance of this object.
      *
-     * @var CliArgvs
+     * @var CliArgvs|null
      */
-    protected static $_instance = null;
+    protected static ?CliArgvs $_instance = null;
 
     /**
      * Holds the arguments, minus the script name.
@@ -24,7 +28,7 @@ class CliArgvs
      *
      * @var array
      */
-    protected $args = [];
+    protected array $args = [];
 
     /**
      * Holds previously established values. These differ depending
@@ -39,7 +43,7 @@ class CliArgvs
      * ]
      * @var array
      */
-    protected $tmp = [];
+    protected array $tmp = [];
 
     /**
      * The name of the script that's been executed.
@@ -47,7 +51,7 @@ class CliArgvs
      * @example `my-script.php`
      * @var string
      */
-    protected $script = null;
+    protected ?string $script = null;
 
     /**
      * Has the parameter of `--help`, `-help` or just `help` been passed
@@ -55,7 +59,7 @@ class CliArgvs
      *
      * @var bool
      */
-    protected $help = false;
+    protected bool $help = false;
 
     /**
      * When accepting parameters, should `--` or `-` be removed?
@@ -64,12 +68,12 @@ class CliArgvs
      *
      * @var bool
      */
-    protected $stripDashes = true;
+    protected bool $stripDashes = true;
 
     /**
      * @var array
      */
-    protected $flags = [];
+    protected array $flags = [];
 
     /**
      * Construct the instance, protected to avoid `new` instances. Passing in
@@ -131,11 +135,12 @@ class CliArgvs
      */
     protected function removeLeadingDash(string $val): string
     {
-        if (substr($val, 0, 2) === '--') {
-            $val = substr($val, 2);
-        } elseif (substr($val, 0, 1) === '-') {
-            $val = substr($val, 1);
+        if (str_starts_with($val, '--')) {
+            return substr($val, 2);
+        } elseif (str_starts_with($val, '-')) {
+            return substr($val, 1);
         }
+
         return $val;
     }
 
@@ -147,7 +152,7 @@ class CliArgvs
      * @return $this
      * @example $inst->addArg('foo', 'bar');
      */
-    public function addArg(string $key, $value): CliArgvs
+    public function addArg(string $key, mixed $value): CliArgvs
     {
         if ($this->stripDashes === true) {
             $key = $this->removeLeadingDash($key);
@@ -175,7 +180,7 @@ class CliArgvs
     /**
      * Get the name of the script.
      *
-     * @return string
+     * @return string|null
      * @example 'my-script.php'
      */
     public function getScript(): ?string
@@ -214,7 +219,7 @@ class CliArgvs
      * @param bool $uniqueValues (optional) whether to remove duplicate values
      * @return string|array|null
      */
-    public function getArg(string $key, bool $uniqueValues = false)
+    public function getArg(string $key, bool $uniqueValues = false): array|string|null
     {
         if ($this->stripDashes === true) {
             $key = $this->removeLeadingDash($key);
@@ -256,12 +261,12 @@ class CliArgvs
      * @param int|null $num
      * @param bool $stripLeadingDashes (optional) default false.
      */
-    public function clear(array $args = null, int $num = null, bool $stripLeadingDashes = true)
+    public function clear(array $args = null, int $num = null, bool $stripLeadingDashes = true): void
     {
         $this->args = [];
         $this->tmp = [];
         $this->script = null;
-        $this->help = null;
+        $this->help = false;
         $this->stripDashes = $stripLeadingDashes;
         if (is_array($args) && count($args) === $num) {
             $this->processArguments($args);
@@ -280,6 +285,7 @@ class CliArgvs
      * @param int|null $num
      * @param bool $stripLeadingDashes (optional) default true.
      * @return CliArgvs
+     * @noinspection PhpDocSignatureInspection
      */
     public static function getInstance(array $args = null, int $num = null, bool $stripLeadingDashes = true): ?CliArgvs
     {

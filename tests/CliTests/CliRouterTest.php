@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 class CliRouterTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testInvalidRouter()
     {
         $command = 'foo.php';
@@ -19,6 +22,9 @@ class CliRouterTest extends TestCase
         $this->assertNull($instanceTwo);
     }
 
+    /**
+     * @return void
+     */
     public function testRouterOneBasic()
     {
         $command = 'foo.php cli-examples route-one';
@@ -29,6 +35,9 @@ class CliRouterTest extends TestCase
         $this->assertCount(0, $instance->getArguments());
     }
 
+    /**
+     * @return void
+     */
     public function testRouterTwoBasic()
     {
         $command = 'foo.php cli-examples two';
@@ -39,6 +48,9 @@ class CliRouterTest extends TestCase
         $this->assertCount(0, $instance->getArguments());
     }
 
+    /**
+     * @return void
+     */
     public function testRouterOneWithArguments()
     {
         $command = 'foo.php cli-examples route-one foo bar';
@@ -53,6 +65,9 @@ class CliRouterTest extends TestCase
         $this->assertEquals('bar', $instance->getArgument(1));
     }
 
+    /**
+     * @return void
+     */
     public function testRouterTwoWithArguments()
     {
         $command = 'foo.php cli-examples two hello world --foo=bar --joe=bloggs';

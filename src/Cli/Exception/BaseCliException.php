@@ -19,10 +19,12 @@
 
 namespace District5\Cli\Exception;
 
+use Exception;
+
 /**
- * Class InvalidConsoleArgumentException
+ * Class BaseCliException
  * @package District5\Cli\Exception
  */
-class InvalidConsoleArgumentException extends BaseCliException
+class BaseCliException extends Exception
 {
 }

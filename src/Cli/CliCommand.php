@@ -1,4 +1,8 @@
-<?php /** @noinspection PhpUnused */
+<?php
+/**
+ * @noinspection SpellCheckingInspection
+ * @noinspection PhpUnused
+ */
 
 /**
  * District5 - Cli
@@ -32,23 +36,23 @@ abstract class CliCommand
     /**
      * @var array
      */
-    protected $argv = [];
+    protected array $argv = [];
 
     /**
      * @var array
      */
-    protected $injectables = [];
+    protected array $injectables = [];
 
     /**
-     * @var CliArgvs
+     * @var CliArgvs|null
      */
-    private $cliArgvs = null;
+    private ?CliArgvs $cliArgvs = null;
 
     /**
      * Set the argv array
      * @param array $argv
      */
-    final public function setArguments(array $argv)
+    final public function setArguments(array $argv): void
     {
         $this->argv = $argv;
     }
@@ -69,7 +73,7 @@ abstract class CliCommand
      * @param int|string $key
      * @return string|array|null
      */
-    final public function getArgument($key)
+    final public function getArgument(int|string $key): array|string|null
     {
         if (is_int($key) && array_key_exists($key, $this->getArguments())) {
             return $this->argv[$key];
@@ -84,8 +88,9 @@ abstract class CliCommand
     /**
      * Set the injectables array
      * @param array $injectables
+     * @return void
      */
-    final public function setInjectables(array $injectables)
+    final public function setInjectables(array $injectables): void
     {
         $this->injectables = $injectables;
     }
@@ -105,7 +110,7 @@ abstract class CliCommand
      * @param int|string $key
      * @return mixed|null
      */
-    final public function getInjectable($key)
+    final public function getInjectable(int|string $key): mixed
     {
         if (array_key_exists($key, $this->getInjectables())) {
             return $this->injectables[$key];
@@ -116,11 +121,11 @@ abstract class CliCommand
 
     /**
      * Output information to the terminal, via a string, or optionally an array
-     * @param string|array $content
+     * @param array|string|int $content
      * @param bool $newLine (optional) default true
      * @param bool $prependDate (optional) default false
      */
-    public function outputInfo($content, bool $newLine = true, bool $prependDate = false)
+    public function outputInfo(array|string|int $content, bool $newLine = true, bool $prependDate = false): void
     {
         if (is_array($content)) {
             foreach ($content as $string) {
@@ -133,11 +138,11 @@ abstract class CliCommand
 
     /**
      * Output errors to the terminal, via a string, or optionally an array
-     * @param string|array $content
+     * @param array|string|int $content
      * @param bool $newLine (optional) default true
      * @param bool $prependDate (optional) default false
      */
-    public function outputError($content, bool $newLine = true, bool $prependDate = false)
+    public function outputError(array|string|int $content, bool $newLine = true, bool $prependDate = false): void
     {
         $tpl = "\033[0;31m%s\033[0m";
         if (is_array($content)) {
@@ -150,11 +155,11 @@ abstract class CliCommand
     }
 
     /**
-     * @param string $content
+     * @param string|int $content
      * @param bool $newLine
      * @param bool $prependDate
      */
-    protected function echoLine(string $content, bool $newLine = true, bool $prependDate = false)
+    protected function echoLine(string|int $content, bool $newLine = true, bool $prependDate = false)
     {
         if ($prependDate === true) {
             try {
@@ -164,7 +169,7 @@ abstract class CliCommand
                     $dt->format('Y-m-d H:i:s u'),
                     $content
                 );
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
         echo $content;
