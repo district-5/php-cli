@@ -3,7 +3,7 @@
     "description": "Easy to use CLI driven PHP applications.",
     "keywords": ["ohconsole"],
     "homepage": "https://github.com/district-5/php-cli",
-    "license": "Proprietary",
+    "license": "mit",
     "authors": [
         {
             "name": "Roger Thomas",
