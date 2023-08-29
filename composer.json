@@ -1,5 +1,5 @@
 {
-    "name": "district-5/cli",
+    "name": "district5/cli",
     "description": "Easy to use CLI driven PHP applications.",
     "keywords": ["ohconsole"],
     "homepage": "https://github.com/district-5/php-cli",
